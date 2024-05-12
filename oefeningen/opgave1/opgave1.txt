@@ -1,0 +1,287 @@
+oef1.1)
+
+int sensorPin = A0;   // select the input pin for the potentiometer
+
+int ledPin1 = 13;
+int ledPin2 = 12;
+int ledPin3 = 11;
+int ledPin4 = 10;
+
+int S1 = 7;
+int S2 = 6;
+
+int sensorValue = 0;  // variable to store the value coming from the sensor
+
+int s1State = 0;
+int s2State = 0;
+
+int led1State = 0;
+
+int led2State = 0;
+
+void setup() {
+  // put your setup code here, to run once:
+
+  Serial.begin(9600);
+
+
+  pinMode(ledPin1, OUTPUT);
+  pinMode(ledPin2, OUTPUT);
+  pinMode(ledPin3, OUTPUT);
+  pinMode(ledPin4, OUTPUT);
+
+  pinMode(S1, INPUT_PULLUP);
+  pinMode(S2, INPUT_PULLUP);
+}
+
+void loop() {
+  int s1LS = s1State;
+  s1State = !digitalRead(S1);
+
+  int s2LS = s2State;
+  s2State = !digitalRead(S2);
+  
+
+  if(s1State && !s1LS){
+    digitalWrite(ledPin1, HIGH);
+  }
+
+  if(s2State && !s2LS){
+    digitalWrite(ledPin1, LOW);
+  }
+
+}
+
+
+
+oef1.2)
+
+nt sensorPin = A0;   // select the input pin for the potentiometer
+
+int ledPin1 = 13;
+int ledPin2 = 12;
+int ledPin3 = 11;
+int ledPin4 = 10;
+
+int S1 = 7;
+int S2 = 6;
+
+int sensorValue = 0;  // variable to store the value coming from the sensor
+
+int s1State = 0;
+int s2State = 0;
+
+int led1State = 0;
+
+
+void setup() {
+  // put your setup code here, to run once:
+
+  Serial.begin(9600);
+
+
+  pinMode(ledPin1, OUTPUT);
+  pinMode(ledPin2, OUTPUT);
+  pinMode(ledPin3, OUTPUT);
+  pinMode(ledPin4, OUTPUT);
+
+  pinMode(S1, INPUT_PULLUP);
+  pinMode(S2, INPUT_PULLUP);
+}
+
+void loop() {
+  int s1LS = s1State;
+  s1State = !digitalRead(S1);
+  
+
+  if(s1State && !s1LS){
+    led1State = !led1State;
+    digitalWrite(ledPin1, led1State);
+  }
+
+}
+
+oef2)
+
+
+int sensorPin = A0;   // select the input pin for the potentiometer
+
+int leds[4] = {13,12,11,10};
+
+int s[2] = {7,6};
+
+int sensorValue = 0;  // variable to store the value coming from the sensor
+
+int sState[2] = {0,0};
+int sLS[2] = {0,0};
+
+
+int ledState[4] = {0,0,0,0};
+
+int aantalLedsBrandend = 0;
+
+
+void setup() {
+  // put your setup code here, to run once:
+
+  Serial.begin(9600);
+
+
+  pinMode(leds[0], OUTPUT);
+  pinMode(leds[1], OUTPUT);
+  pinMode(leds[2], OUTPUT);
+  pinMode(leds[3], OUTPUT);
+
+  pinMode(s[0], INPUT_PULLUP);
+  pinMode(s[1], INPUT_PULLUP);
+}
+
+void loop() {
+  sLS[0] = sState[0];
+  sState[0] = !digitalRead(s[0]);
+
+  sLS[1] = sState[1];
+  sState[1] = !digitalRead(s[1]);
+
+  
+  
+
+  if(sState[0] && !sLS[0]){
+    aantalLedsBrandend++;
+  }
+  if(sState[1] && !sLS[1]){
+    aantalLedsBrandend--;
+  }
+
+
+  int i = 0;
+  while(i < aantalLedsBrandend){
+    digitalWrite(leds[i], HIGH);
+    i++;
+  }
+  while(i < sizeof(leds)){
+    digitalWrite(leds[i], LOW);
+    i++;
+  }
+
+}
+
+
+
+oef3)
+
+int sensorPin = A0;   // select the input pin for the potentiometer
+
+int ledPin1 = 3;
+
+int sensorValue = 0;  // variable to store the value coming from the sensor
+
+
+void setup() {
+  // put your setup code here, to run once:
+
+  Serial.begin(9600);
+
+
+  pinMode(ledPin1, OUTPUT);
+
+
+  pinMode(sensorPin, INPUT);
+
+}
+
+void loop() {
+  
+
+  sensorValue = analogRead(sensorPin)/4;
+  Serial.println(sensorValue);
+  analogWrite(ledPin1, sensorValue);
+
+}
+
+
+
+oef4)
+
+int sensorPin = A0;  // select the input pin for the potentiometer
+
+int leds[4] = { 12, 11, 10, 9 };
+
+int s[2] = { 7, 6 };
+long ledsBrandend = 0;
+long pressed = 0;
+
+bool rechts = true;
+
+int sensorValue = 0;  // variable to store the value coming from the sensor
+
+int sState[2] = { 0, 0 };
+int sLS[2] = { 0, 0 };
+
+
+int ledState[4] = { 0, 0, 0, 0 };
+int i = 0;
+
+
+void setup() {
+  // put your setup code here, to run once:
+
+  Serial.begin(9600);
+
+
+  pinMode(leds[0], OUTPUT);
+  pinMode(leds[1], OUTPUT);
+  pinMode(leds[2], OUTPUT);
+  pinMode(leds[3], OUTPUT);
+
+  pinMode(s[0], INPUT_PULLUP);
+  pinMode(s[1], INPUT_PULLUP);
+
+  digitalWrite(leds[i], HIGH);
+}
+
+void loop() {
+  sLS[0] = sState[0];
+  sState[0] = !digitalRead(s[0]);
+
+  // sLS[1] = sState[1];
+  // sState[1] = !digitalRead(s[1]);
+
+  if (millis() - ledsBrandend > 200) {
+    ledsBrandend = millis();
+    if (rechts) {
+      i++;
+
+      digitalWrite(leds[i - 1], 0);
+
+      if (i > 3) {
+        i = 0;
+      }
+      digitalWrite(leds[i], 1);
+    } else {
+      i--;
+
+      digitalWrite(leds[i + 1], 0);
+
+      if (i < 0) {
+        i = 3;
+      }
+      digitalWrite(leds[i], 1);
+    }
+  }
+
+
+
+
+  if (sState[0] && !sLS[0]) {
+    pressed = millis();
+  }
+  Serial.println(pressed);
+  if (!sState[0] && sLS[0]) {
+    if (millis() - pressed > 200) {
+      rechts = false;
+    } else {
+      rechts = true;
+    }
+  }
+}
